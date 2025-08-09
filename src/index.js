@@ -15,6 +15,7 @@ const WS_PORT = process.env.WEBSOCKET_PORT || 8080;
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
+app.use(express.static('public'));
 
 // Global storage for crypto data
 let cryptoData = new Map();
@@ -55,13 +56,20 @@ wss.on('connection', (ws) => {
 // Broadcast to all WebSocket clients
 function broadcastToClients(data) {
     const message = JSON.stringify(data);
+    console.log(`📡 Broadcasting to ${wsClients.size} WebSocket clients`);
+    
     wsClients.forEach(client => {
         if (client.readyState === WebSocket.OPEN) {
             try {
                 client.send(message);
+                console.log('✅ Message sent to client');
             } catch (error) {
+                console.error('❌ WebSocket send error:', error);
                 wsClients.delete(client);
             }
+        } else {
+            console.log('🗑️ Removing disconnected client');
+            wsClients.delete(client);
         }
     });
 }
@@ -193,6 +201,7 @@ function checkAlerts(data) {
 
 // Update crypto data
 async function updateCryptoData() {
+    const startTime = Date.now();
     console.log('🔄 Updating crypto data...');
     
     try {
@@ -204,18 +213,40 @@ async function updateCryptoData() {
         }
         
         if (data.length > 0) {
+            // Update storage
             data.forEach(coin => cryptoData.set(coin.symbol, coin));
+            
+            // Check for alerts
             checkAlerts(data);
-            broadcastToClients({ type: 'update', data, timestamp: new Date().toISOString() });
-            console.log(`✅ Updated ${data.length} cryptocurrencies`);
+            
+            // Broadcast to WebSocket clients
+            const updateMessage = { 
+                type: 'update', 
+                data, 
+                timestamp: new Date().toISOString(),
+                source: data[0]?.source || 'unknown',
+                count: data.length
+            };
+            broadcastToClients(updateMessage);
+            
+            const duration = Date.now() - startTime;
+            console.log(`✅ Updated ${data.length} cryptocurrencies in ${duration}ms`);
+            console.log(`📊 Top prices: ${data.slice(0, 3).map(c => `${c.symbol}: $${c.price}`).join(', ')}`);
+        } else {
+            console.log('❌ No data received from any API');
         }
     } catch (error) {
         console.error('❌ Update error:', error.message);
+        console.error('Stack:', error.stack);
     }
 }
 
 // API Routes
 app.get('/', (req, res) => {
+    res.sendFile('index.html', { root: 'public' });
+});
+
+app.get('/api/status', (req, res) => {
     res.json({
         name: 'Crypto Market Monitor',
         version: '1.0.0',
@@ -276,8 +307,24 @@ app.listen(PORT, () => {
     updateCryptoData();
 });
 
-// Schedule updates every 30 seconds
-cron.schedule('*/30 * * * * *', updateCryptoData);
+// Schedule frequent updates for real-time monitoring
+console.log('⏰ Setting up automatic updates...');
+
+// Update every 10 seconds for real-time experience
+cron.schedule('*/10 * * * * *', () => {
+    console.log('🔄 Auto-updating crypto data...');
+    updateCryptoData();
+});
+
+// Also update every minute for backup
+cron.schedule('* * * * *', () => {
+    console.log('🔄 Minute update - fetching latest data...');
+    updateCryptoData();
+});
+
+// Initial data fetch - immediate
+console.log('🚀 Fetching initial crypto data...');
+updateCryptoData();
 
 // Graceful shutdown
 process.on('SIGINT', () => {
