@@ -1,0 +1,216 @@
+{
+  "name": "crypto-project-monitor",
+  "displayName": "Crypto Project Monitor",
+  "description": "Real-time cryptocurrency project monitoring and notifications",
+  "version": "1.0.0",
+  "publisher": "crypto-monitor-team",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other",
+    "Data Science",
+    "Machine Learning"
+  ],
+  "keywords": [
+    "cryptocurrency",
+    "blockchain",
+    "trading",
+    "notifications",
+    "monitoring",
+    "defi",
+    "crypto"
+  ],
+  "activationEvents": [
+    "onCommand:crypto-monitor.start",
+    "onCommand:crypto-monitor.configure",
+    "onCommand:crypto-monitor.dashboard"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "crypto-monitor.start",
+        "title": "Start Monitoring",
+        "category": "Crypto Monitor",
+        "icon": "$(play)"
+      },
+      {
+        "command": "crypto-monitor.stop",
+        "title": "Stop Monitoring",
+        "category": "Crypto Monitor",
+        "icon": "$(stop)"
+      },
+      {
+        "command": "crypto-monitor.configure",
+        "title": "Configure Settings",
+        "category": "Crypto Monitor",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "crypto-monitor.dashboard",
+        "title": "Open Dashboard",
+        "category": "Crypto Monitor",
+        "icon": "$(dashboard)"
+      },
+      {
+        "command": "crypto-monitor.watchlist",
+        "title": "Manage Watchlist",
+        "category": "Crypto Monitor",
+        "icon": "$(list-unordered)"
+      },
+      {
+        "command": "crypto-monitor.test",
+        "title": "Test Notification",
+        "category": "Crypto Monitor",
+        "icon": "$(beaker)"
+      }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "cryptoMonitorView",
+          "name": "Crypto Monitor",
+          "when": "cryptoMonitorEnabled"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "crypto-monitor",
+          "title": "Crypto Monitor",
+          "icon": "$(graph)"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Crypto Monitor",
+      "properties": {
+        "cryptoMonitor.serverUrl": {
+          "type": "string",
+          "default": "ws://localhost:8080",
+          "description": "WebSocket server URL for crypto monitoring"
+        },
+        "cryptoMonitor.keywords": {
+          "type": "array",
+          "default": [
+            "new crypto",
+            "new token",
+            "presale",
+            "ico",
+            "ido",
+            "airdrop"
+          ],
+          "description": "Keywords to monitor for new crypto projects"
+        },
+        "cryptoMonitor.sources": {
+          "type": "array",
+          "default": [
+            "coinmarketcap",
+            "coingecko",
+            "twitter",
+            "reddit",
+            "github"
+          ],
+          "description": "Data sources to monitor"
+        },
+        "cryptoMonitor.notificationTypes": {
+          "type": "object",
+          "default": {
+            "popup": true,
+            "statusBar": true,
+            "sound": false
+          },
+          "description": "Types of notifications to show"
+        },
+        "cryptoMonitor.riskLevels": {
+          "type": "array",
+          "default": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "description": "Risk levels to include in notifications"
+        },
+        "cryptoMonitor.minMarketCap": {
+          "type": "number",
+          "default": 0,
+          "description": "Minimum market cap filter (USD)"
+        },
+        "cryptoMonitor.maxMarketCap": {
+          "type": "number",
+          "default": 100000000,
+          "description": "Maximum market cap filter (USD)"
+        },
+        "cryptoMonitor.autoStart": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically start monitoring when VS Code opens"
+        }
+      }
+    },
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "crypto-monitor.start",
+          "when": "!cryptoMonitorActive"
+        },
+        {
+          "command": "crypto-monitor.stop",
+          "when": "cryptoMonitorActive"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "crypto-monitor.start",
+          "when": "view == cryptoMonitorView && !cryptoMonitorActive",
+          "group": "navigation"
+        },
+        {
+          "command": "crypto-monitor.stop",
+          "when": "view == cryptoMonitorView && cryptoMonitorActive",
+          "group": "navigation"
+        },
+        {
+          "command": "crypto-monitor.configure",
+          "when": "view == cryptoMonitorView",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@types/node": "16.x",
+    "@types/ws": "^8.5.0",
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "@typescript-eslint/parser": "^5.45.0",
+    "eslint": "^8.28.0",
+    "typescript": "^4.9.4",
+    "@vscode/test-electron": "^2.2.0",
+    "vsce": "^2.15.0"
+  },
+  "dependencies": {
+    "ws": "^8.14.2",
+    "axios": "^1.6.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/crypto-monitor-extension.git"
+  },
+  "homepage": "https://github.com/your-username/crypto-monitor-extension#readme",
+  "bugs": {
+    "url": "https://github.com/your-username/crypto-monitor-extension/issues"
+  },
+  "license": "MIT"
+}
