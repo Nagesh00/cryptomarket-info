@@ -1,53 +1,53 @@
-# Crypto Project Monitor
+# 🚀 Crypto Monitor 24/7 - Production Ready System
 
-A comprehensive real-time cryptocurrency project monitoring system that tracks new projects across multiple data sources including CoinMarketCap, CoinGecko, Twitter, Reddit, GitHub, and dark web channels.
+A comprehensive, production-ready cryptocurrency monitoring system with real-time notifications, advanced shell integration, and 24/7 reliability.
 
-## 🚀 Features
+## ✨ Features
 
-- **Real-time Monitoring**: Instant notifications for new crypto projects
-- **Multi-Source Data Collection**: CoinMarketCap, CoinGecko, Twitter, Reddit, GitHub, Dark Web
-- **Advanced Analysis**: Sentiment analysis, risk assessment, legitimacy scoring
-- **VS Code Integration**: Real-time notifications directly in your development environment
-- **Multiple Notification Channels**: Email, Telegram, Discord, WebSocket, Push notifications
-- **Customizable Filters**: Keywords, sources, risk levels, market cap ranges
-- **Web Dashboard**: Comprehensive web interface for monitoring and management
-- **API Integration**: RESTful API for external integrations
+### 🔔 Real-Time Notifications
+- **Telegram Bot Integration** - Instant alerts to your Telegram
+- **Email Notifications** - Gmail SMTP integration 
+- **Smart Price Alerts** - 5% threshold for major alerts, 2% for rapid movements
+- **24/7 Monitoring** - Continuous price checking every minute
 
-## 📋 Prerequisites
+### 🖥️ Advanced Shell Integration
+- **Command Detection** - Smart recognition of crypto commands
+- **Natural Language Processing** - Commands like "show bitcoin", "start monitor"
+- **Fuzzy Matching** - Suggests similar commands when you mistype
+- **Tab Completion** - Auto-complete for crypto symbols and commands
 
-- Node.js 16.x or higher
-- Redis server
-- MongoDB (optional, for data persistence)
-- API Keys for data sources (see Configuration section)
+### 📊 Production Dashboard
+- **Real-Time Web Interface** - Beautiful, responsive dashboard
+- **System Monitoring** - Uptime, memory usage, request stats
+- **Live Crypto Data** - Real-time price updates
+- **Alert History** - Recent price alerts and notifications
 
-## 🛠️ Installation
+## � Quick Start
 
-### 1. Clone and Install Dependencies
+### Prerequisites
+- Node.js 18+ 
+- PowerShell 5.1+ (Windows)
 
-```bash
-git clone <repository-url>
-cd cryptoanalysis1
-npm install
-```
+### Installation
 
-### 2. Install Redis
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Nagesh00/cryptomarket-info.git
+   cd cryptomarket-info
+   ```
 
-**Windows:**
-```bash
-# Using Chocolatey
-choco install redis-64
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-# Or download from: https://github.com/microsoftarchive/redis/releases
-```
+3. **Start the production server:**
+   ```bash
+   npm start
+   ```
 
-**Linux/macOS:**
-```bash
-# Ubuntu/Debian
-sudo apt-get install redis-server
-
-# macOS with Homebrew
-brew install redis
-```
+4. **Access the dashboard:**
+   Open `http://localhost:3000/dashboard` in your browser
 
 ### 3. Configure Environment Variables
 

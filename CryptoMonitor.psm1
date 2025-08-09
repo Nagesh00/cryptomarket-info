@@ -260,8 +260,73 @@ function Restart-CryptoMonitor {
     }
 }
 
-# Function to show help
-function Show-CryptoHelp {
+# Function to test notifications
+function Test-CryptoNotifications {
+    [CmdletBinding()]
+    param()
+    
+    try {
+        Write-Host "🧪 Testing notification system..." -ForegroundColor Cyan
+        
+        $response = Invoke-RestMethod -Uri "$($Global:CryptoMonitorConfig.ApiUrl)/api/test-notifications" -Method Post
+        
+        if ($response.success) {
+            Write-Host "✅ Test notifications sent successfully!" -ForegroundColor Green
+            Write-Host "   Check your Telegram and email for test alerts" -ForegroundColor Yellow
+        } else {
+            Write-Error "❌ Failed to send test notifications"
+        }
+    } catch {
+        Write-Error "❌ Error testing notifications: $($_.Exception.Message)"
+    }
+}
+
+# Function to get alert history
+function Get-CryptoAlerts {
+    [CmdletBinding()]
+    param(
+        [int]$Count = 10
+    )
+    
+    try {
+        Write-Host "📋 Fetching crypto alerts..." -ForegroundColor Cyan
+        
+        $response = Invoke-RestMethod -Uri "$($Global:CryptoMonitorConfig.ApiUrl)/api/alerts" -Method Get
+        
+        if ($response.success) {
+            $alerts = $response.alerts | Select-Object -First $Count
+            
+            Write-Host "`n🚨 Recent Crypto Alerts:" -ForegroundColor Yellow
+            Write-Host "=" * 50 -ForegroundColor DarkGray
+            
+            foreach ($alert in $alerts) {
+                $time = Get-Date $alert.timestamp -Format "MM/dd HH:mm:ss"
+                $typeIcon = switch ($alert.type) {
+                    "gain" { "📈" }
+                    "loss" { "📉" }
+                    "rapid_movement" { "⚡" }
+                    default { "🔔" }
+                }
+                
+                Write-Host "`n$typeIcon $($alert.symbol) - $time" -ForegroundColor White
+                
+                if ($alert.type -eq "rapid_movement") {
+                    Write-Host "   Rapid movement: $([math]::Round($alert.rapid_change, 2))%" -ForegroundColor Yellow
+                    Write-Host "   Price: $([math]::Round($alert.current_price, 6))" -ForegroundColor Gray
+                } else {
+                    Write-Host "   24h change: $([math]::Round($alert.change_24h, 2))%" -ForegroundColor Yellow
+                    Write-Host "   Price: $([math]::Round($alert.current_price, 6))" -ForegroundColor Gray
+                }
+            }
+            
+            Write-Host "`n📊 Total alerts in history: $($response.count)" -ForegroundColor Green
+        } else {
+            Write-Error "❌ Failed to fetch alerts"
+        }
+    } catch {
+        Write-Error "❌ Error fetching alerts: $($_.Exception.Message)"
+    }
+}
     Write-Host "`n🚀 PowerShell Crypto Monitor Commands" -ForegroundColor Cyan
     Write-Host "=" * 50 -ForegroundColor DarkGray
     
@@ -292,9 +357,12 @@ Export-ModuleMember -Function @(
     'Get-CryptoMonitorStatus',
     'Send-CryptoAlert',
     'Restart-CryptoMonitor',
+    'Test-CryptoNotifications',
+    'Get-CryptoAlerts',
     'Show-CryptoHelp'
 )
 
 # Auto-display help when module is imported
 Write-Host "`n🚀 PowerShell Crypto Monitor Module Loaded!" -ForegroundColor Green
 Write-Host "Type 'Show-CryptoHelp' for available commands" -ForegroundColor Cyan
+Write-Host "Type 'Test-CryptoNotifications' to test Telegram & Email alerts" -ForegroundColor Yellow

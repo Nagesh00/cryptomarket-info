@@ -2,12 +2,17 @@
   "name": "crypto-project-monitor",
   "version": "1.0.0",
   "description": "Real-time crypto project monitoring system with multi-source data collection and notifications",
-  "main": "src/index.js",
+  "main": "production-server.js",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "node production-server.js",
+    "dev": "node simple-server.js",
+    "production": "NODE_ENV=production node production-server.js",
     "simple": "node simple-server.js",
-    "dev": "nodemon src/index.js",
     "test": "jest",
+    "docker:build": "docker build -t crypto-monitor .",
+    "docker:run": "docker-compose up -d",
+    "docker:stop": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
     "heroku-postbuild": "npm install",
     "build": "npm run build:api && npm run build:extension",
     "build:api": "webpack --config webpack.api.config.js",
@@ -31,7 +36,7 @@
     "mongoose": "^8.0.3",
     "natural": "^6.12.0",
     "node-cron": "^3.0.3",
-    "nodemailer": "^6.9.7",
+    "nodemailer": "^6.10.1",
     "rate-limiter-flexible": "^2.4.2",
     "redis": "^4.6.11",
     "sentiment": "^5.0.2",
@@ -59,5 +64,13 @@
     "analysis"
   ],
   "author": "Crypto Monitor Team",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nagesh00/cryptomarket-info.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Nagesh00/cryptomarket-info/issues"
+  },
+  "homepage": "https://github.com/Nagesh00/cryptomarket-info#readme"
 }
