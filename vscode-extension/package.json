@@ -1,30 +1,35 @@
 {
   "name": "crypto-project-monitor",
-  "displayName": "Crypto Project Monitor",
-  "description": "Real-time cryptocurrency project monitoring and notifications",
-  "version": "1.0.0",
-  "publisher": "crypto-monitor-team",
+  "displayName": "Advanced Crypto Project Monitor",
+  "description": "Real-time monitoring of new crypto projects with multi-source analysis and advanced notifications",
+  "version": "2.0.0",
+  "publisher": "cryptoanalysis",
   "engines": {
-    "vscode": "^1.74.0"
+    "vscode": "^1.60.0"
   },
   "categories": [
     "Other",
+    "Dashboards",
     "Data Science",
     "Machine Learning"
   ],
   "keywords": [
+    "crypto",
     "cryptocurrency",
     "blockchain",
-    "trading",
-    "notifications",
     "monitoring",
+    "notifications",
     "defi",
-    "crypto"
+    "trading",
+    "new-projects",
+    "sentiment-analysis",
+    "risk-assessment"
   ],
   "activationEvents": [
     "onCommand:crypto-monitor.start",
+    "onCommand:crypto-monitor.stop",
     "onCommand:crypto-monitor.configure",
-    "onCommand:crypto-monitor.dashboard"
+    "onStartupFinished"
   ],
   "main": "./out/extension.js",
   "contributes": {
