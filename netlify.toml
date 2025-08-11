@@ -1,0 +1,12 @@
+# Netlify deployment configuration
+[build]
+  command = "npm install"
+  publish = "."
+
+[build.environment]
+  NODE_ENV = "production"
+
+[[redirects]]
+  from = "/*"
+  to = "/advanced-crypto-monitor.js"
+  status = 200
