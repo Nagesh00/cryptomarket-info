@@ -4,7 +4,7 @@
   "description": "Comprehensive real-time cryptocurrency project monitoring system with AI analysis, dark web intelligence, and multi-channel notifications",
   "main": "advanced-crypto-monitor.js",
   "scripts": {
-    "start": "node deployment-crypto-monitor.js",
+    "start": "node crypto-monitor-deployment.js",
     "start:full": "node advanced-crypto-monitor.js",
     "dev": "NODE_ENV=development node advanced-crypto-monitor.js",
     "monitor": "node crypto-project-monitor.js",
@@ -15,7 +15,7 @@
     "test:node": "node -e \"console.log('Node.js test passed')\"",
     "test:python": "python -c \"print('Python test passed')\"",
     "build": "npm install",
-    "production": "NODE_ENV=production node deployment-crypto-monitor.js",
+    "production": "NODE_ENV=production node crypto-monitor-deployment.js",
     "simple": "node simple-server.js",
     "extension": "cd vscode-extension && npm install && npm run compile",
     "heroku-postbuild": "npm install"
