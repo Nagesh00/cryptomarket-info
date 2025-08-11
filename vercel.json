@@ -8,7 +8,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/simple-deployment-server.js"
+      "dest": "/advanced-crypto-monitor.js"
     }
   ],
   "env": {

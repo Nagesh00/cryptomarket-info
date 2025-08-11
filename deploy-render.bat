@@ -10,8 +10,8 @@ echo 4. Connect to repository: https://github.com/Nagesh00/cryptomarket-info
 echo 5. Configure settings:
 echo    - Name: crypto-monitor-live
 echo    - Environment: Node
-echo    - Build Command: npm install
-echo    - Start Command: node simple-deployment-server.js
+echo    - Build Command: npm install && pip install -r requirements.txt
+echo    - Start Command: node advanced-crypto-monitor.js
 echo    - Instance Type: Free
 echo.
 echo 6. Click "Create Web Service"
