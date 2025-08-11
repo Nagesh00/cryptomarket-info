@@ -1,0 +1,15 @@
+# Build configuration for Nixpacks (Railway)
+[phases.setup]
+nixPkgs = ["nodejs-18_x", "python310", "python310Packages.pip"]
+
+[phases.install]
+cmds = [
+  "npm install",
+  "python -m pip install -r requirements.txt"
+]
+
+[phases.build]
+cmds = ["echo 'Build complete'"]
+
+[start]
+cmd = "node advanced-crypto-monitor.js"

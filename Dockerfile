@@ -1,26 +1,41 @@
-# Use official Node.js runtime as base image
-FROM node:18-alpine
+# Multi-stage Dockerfile for Advanced Crypto Monitor with Python support
+FROM node:18-slim
+
+# Install Python and system dependencies
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    python3-venv \
+    build-essential \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
 
-# Install system dependencies
-RUN apk add --no-cache \
-    dumb-init \
-    && rm -rf /var/cache/apk/*
+# Create Python virtual environment
+RUN python3 -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
 
 # Copy package files
 COPY package*.json ./
+COPY requirements.txt ./
 
-# Install dependencies
-RUN npm ci --only=production && npm cache clean --force
+# Install Node.js dependencies
+RUN npm install --production
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 COPY . .
 
+# Create necessary directories
+RUN mkdir -p logs data
+
 # Create non-root user
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nodejs -u 1001
+RUN addgroup --gid 1001 --system nodejs
+RUN adduser --system --uid 1001 nodejs
 
 # Change ownership of app directory
 RUN chown -R nodejs:nodejs /app
@@ -30,11 +45,10 @@ USER nodejs
 EXPOSE 3000
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-    CMD node -e "require('http').get('http://localhost:3000/api/status', (res) => { \
-        process.exit(res.statusCode === 200 ? 0 : 1) \
-    }).on('error', () => process.exit(1))"
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:3000/health || exit 1
 
-# Start application with dumb-init for proper signal handling
+# Start the application
+CMD ["node", "advanced-crypto-monitor.js"]
 ENTRYPOINT ["dumb-init", "--"]
 CMD ["node", "production-server.js"]
