@@ -8,5 +8,5 @@
 
 [[redirects]]
   from = "/*"
-  to = "/advanced-crypto-monitor.js"
+  to = "/simple-deployment-server.js"
   status = 200
